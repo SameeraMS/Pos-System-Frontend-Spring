@@ -1,0 +1,41 @@
+main{
+    position: relative;
+}
+
+#systemName{
+    color: black;
+    font-weight: bolder;
+    margin-right: 10vw;
+    margin-left: 2vw;
+}
+
+#search{
+    margin: 20px;
+    width: 40vw;
+}
+
+#table{
+    margin: 30px;
+}
+
+#button{
+    right: 0;
+    top: 0;
+    position: absolute;
+    margin-right: 10vw;
+}
+
+#viewEdit{
+    margin-left: 20px;
+}
+
+#title>div{
+    padding-right: 4vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 10vh;
+    background-color: brown;
+    color: white;
+}
