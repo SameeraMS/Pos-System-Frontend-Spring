@@ -10,3 +10,8 @@
 
 
 ![Untitled Diagram drawio-2](https://github.com/SameeraMS/Css-Assignment-6/assets/137902086/751339ec-ed89-4906-9b8b-690545194ab1)
+
+
+# Mockup Diagram 
+
+https://www.figma.com/file/dqZ6FItxij073xGKbTTQOj/Untitled?type=design&node-id=0%3A1&mode=design&t=oqYZkhvLPK11Uhin-1

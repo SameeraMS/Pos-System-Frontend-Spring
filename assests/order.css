@@ -1,0 +1,46 @@
+h3{
+    margin-left: 1vw;
+}
+
+#customer,#order,#item,#invoiceDetails{
+    border: 2px solid black;
+    width: 28vw;
+    margin-left: 1vw;
+    padding: 1vw;
+    border-radius: 15px;
+
+}
+
+#itemDetails{
+    top: 17vh;
+    position: absolute;
+    margin-left: 29vw;
+    border-radius: 15px;
+}
+
+#total{
+    position: absolute;
+    top: 81vh;
+    border: 2px solid black;
+    width: 50vw;
+    height: 18vh;
+    margin-left: 49vw;
+    padding: 1vw;
+    border-radius: 15px;
+}
+
+#invoice{
+    position: absolute;
+    top: 15vh;
+    width: 25vw;
+    height: 18vh;
+    margin-left: 57vw;
+    padding: 1vw;
+    border-radius: 15px;
+}
+
+#invoiceDetails{
+    width: 40vw;
+    height: 57vh;
+}
+

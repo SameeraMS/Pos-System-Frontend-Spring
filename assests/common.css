@@ -1,3 +1,7 @@
+body{
+    overflow: hidden;
+}
+
 main{
     position: relative;
 }
@@ -35,7 +39,8 @@ main{
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 10vh;
+    height: 9vh;
     background-color: brown;
     color: white;
+
 }
