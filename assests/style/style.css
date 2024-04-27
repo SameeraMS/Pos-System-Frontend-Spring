@@ -1,0 +1,252 @@
+
+:root{
+    /*
+    --primary: linear-gradient(90deg, #103ce7 6.54%, #64e9ff 92.06%);
+    */
+    --primary: #103ce7;
+    --font-color: #2c3f5e;
+    --font-grey: #C7C7C7;
+    --accent-color: #4a4ac0;
+}
+
+body{
+    background: #dde8f1;
+}
+
+.navbar{
+    margin-top: 1rem;
+    width: 95%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.logo{
+    background: var(--primary);
+    color: transparent;
+    -webkit-background-clip: text;
+    font-size: 36px;
+    font-weight: 700;
+    margin-right: 80px;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+    width: 15rem;
+}
+
+.nav-item{
+    margin: 0 10px;
+    cursor: pointer;
+    right: 0;
+    position: relative;
+}
+
+.nav-item:hover .nav-link{
+    color: var(--accent-color);
+}
+
+.nav-link{
+    color: var(--font-grey);
+}
+
+#navbarNav{
+    justify-content: end;
+}
+
+.active-page{
+    background: var(--primary);
+    color: transparent;
+    -webkit-background-clip: text;
+    position: relative;
+    transition: all 0.8s ease;
+}
+
+.active-page:after{
+    content: '';
+    position: absolute;
+    left: 20%;
+    bottom: 0;
+    width: 60%;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 30px;
+}
+
+section{
+    width: 100%;
+    height: 100vh;
+}
+
+section:first-child{
+    height: 80vh;
+}
+
+#home{
+    margin-top: 100px;
+}
+
+.card{
+    height: 180px;
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.03);
+    border: none;
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.card-title{
+    color: var(--font-grey);
+    font-size: 20px;
+}
+
+.count{
+    color: var(--font-color);
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.card-body i{
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    color: var(--font-grey);
+    font-size: 50px;
+}
+
+.link-page{
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    text-decoration: none;
+    color: var(--accent-color);
+    cursor: pointer;
+
+}
+
+.header{
+    color: var(--font-color);
+    margin-top: 100px;
+}
+
+th[scope = 'col']{
+    background: var(--accent-color);
+    color: #ffffff;
+    text-align: center;
+}
+
+th[scope = 'col']:first-child{
+    border-radius: 15px 0 0 15px;
+}
+
+th[scope = 'col']:last-child{
+    border-radius: 0 15px 15px 0;
+}
+
+td, th[scope = 'row']{
+    text-align: center;
+}
+
+.search{
+    position: relative;
+}
+
+.search input{
+    height: 50px;
+    width: 300px;
+    text-indent: 30px;
+    display: inline;
+}
+
+.search .fa-magnifying-glass{
+    position: absolute;
+    top: 18px;
+    left: 16px;
+}
+
+.btn-primary{
+    height: 50px;
+}
+
+.search select{
+    width: 200px;
+    height: 50px;
+    margin-left: 20px;
+}
+
+.place_order{
+    background: var(--primary);
+    border: none;
+}
+
+.order_container{
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+}
+
+.order_container .container .row .col div{
+    margin: 15px;
+}
+
+.order_container .container h4{
+    color: var(--font-color);
+}
+
+.cart_btn{
+    background: var(--accent-color);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.cart_remove{
+    background: #ef233c;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 3px 15px 3px 15px;
+}
+
+.cart_remove:hover{
+    opacity: 0.7;
+}
+
+.order_btn{
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px;
+}
+
+@media all and (max-width: 992px) {
+    .chart-card div{
+        width: 300px;
+    }
+}
+
+@media all and (max-width: 768px) {
+    section{
+        height: 150vh;
+    }
+
+    .chart-card div{
+        width: 450px;
+    }
+
+    .image-class{
+        display: none;
+    }
+
+    .active-page:after{
+        width: 0;
+    }
+}
+
+@media all and (max-width: 576px) {
+    .chart-card{
+        display: none;
+    }
+}
