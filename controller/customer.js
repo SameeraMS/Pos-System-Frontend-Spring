@@ -7,14 +7,6 @@ var current_id = customers.length + 1;
 
 $('#customerId').val(current_id);
 
-const customer_Id = $('#customerId');
-const full_name = $('#fullname');
-const address = $('#address');
-const contact = $('#contact');
-const customer_btn = $('#customer_btn button');
-const customer_search = $('#customer_search input');
-const customer_search_by = $('#customer_search select');
-
 function loadTable() {
     $('#customer_table').empty();
 
@@ -95,6 +87,7 @@ $('#customer_delete').on('click',  () => {
     customers.splice(index, 1);
     loadTable();
     $('#customer_reset').click();
+    $('#customerId').val(customers.length + 1);
 
 })
 

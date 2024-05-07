@@ -183,7 +183,7 @@
                         <form>
                             <div class="mb-3">
                                 <label for="itemCode" class="form-label">Item Code</label>
-                                <input type="text" class="form-control" id="itemCode">
+                                <input type="text" class="form-control" id="itemCode" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
@@ -198,10 +198,10 @@
                                 <input type="number" class="form-control" id="qty">
                             </div>
                             <div id="item_btn" class="mt-5">
-                                <button type="button" class="btn btn-outline-success">Submit</button>
-                                <button type="button" class="btn btn-outline-warning">Update</button>
-                                <button type="button" class="btn btn-outline-danger">Delete</button>
-                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                <button type="button" class="btn btn-outline-success" id="item_submit">Submit</button>
+                                <button type="button" class="btn btn-outline-warning" id="item_update">Update</button>
+                                <button type="button" class="btn btn-outline-danger" id="item_delete">Delete</button>
+                                <button type="reset" class="btn btn-outline-secondary" id="item_reset">Reset</button>
                             </div>
                         </form>
                     </div>
@@ -224,7 +224,7 @@
                                 <th scope="col">Qty</th>
                             </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody id="item_table"></tbody>
                         </table>
                     </div>
                 </div>
@@ -446,6 +446,7 @@
 <script src="assests/lib/jquery.min.js"></script>
 <script src="controller/script.js"></script>
 <script type="module" src="controller/customer.js"></script>
+<script type="module" src="controller/item.js"></script>
 
 
 </body>
