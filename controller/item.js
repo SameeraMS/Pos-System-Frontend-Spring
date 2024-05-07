@@ -5,8 +5,13 @@ import {items} from "../db/db.js";
 var index = 0;
 var current_id = items.length + 1;
 
-$('#itemCode').val(current_id);
+initialize()
 
+
+function initialize() {
+    loadTable();
+    $('#itemCode').val(items.length + 1);
+}
 
 function loadTable() {
     $('#item_table').empty();
@@ -39,13 +44,10 @@ $('#item_submit').on('click', () => {
 
     let item = new ItemModel(id,desc,unit_price,qty);
     items.push(item);
-    console.log(item);
 
-    loadTable();
 
     $('#item_reset').click();
-    $('#itemCode').val(items.length + 1);
-
+    initialize()
 });
 
 $('#item_table').on('click','tr', function () {
@@ -69,17 +71,39 @@ $(`#item_update`).on(`click`, () => {
     items[index].unitPrice = $('#unitPrice').val();
     items[index].qty = $('#qty').val();
 
-    loadTable();
     $('#item_reset').click();
-    $('#itemCode').val(items.length + 1);
-
+    initialize()
 })
 
 $('#item_delete').on('click',  () => {
     items.splice(index, 1);
-    loadTable();
     $('#item_reset').click();
-    $('#itemCode').val(items.length + 1);
-
+    initialize()
 })
 
+
+$("#searchItem").on("input", function() {
+    console.log("hello");
+    var typedText = $("#searchItem").val();
+    items.map((item, index) => {
+        if (typedText == "") {
+                loadTable()
+        }
+
+        if (typedText == item.itemCode) {
+            var select_index = index;
+
+            $('#item_table').empty();
+
+            var record = `<tr>
+               <td class="itm-id-val">${items[select_index].itemCode}</td>
+               <td class="itm-desc-val">${items[select_index].description}</td>
+               <td class="itm-unitPrice-val">${items[select_index].unitPrice}</td>
+               <td class="itm-qty-val">${items[select_index].qty}</td>
+            </tr>`;
+
+            console.log(record)
+            $('#item_table').append(record);
+        }
+    })
+});
