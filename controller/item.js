@@ -1,5 +1,6 @@
 import ItemModel from "../model/ItemModel.js";
 import {items} from "../db/db.js";
+import {setItemIds} from "./order.js";
 
 
 var index = 0;
@@ -11,6 +12,7 @@ initialize()
 function initialize() {
     loadTable();
     $('#itemCode').val(items.length + 1);
+    setItemIds(items)
 }
 
 function loadTable() {
@@ -107,3 +109,5 @@ $("#searchItem").on("input", function() {
         }
     })
 });
+
+

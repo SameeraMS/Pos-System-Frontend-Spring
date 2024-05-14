@@ -1,5 +1,6 @@
 import CustomerModel from "../model/CutomerModel.js";
 import {customers, items} from "../db/db.js";
+import {setCustomerIds} from "./order.js";
 
 
 var index = 0;
@@ -10,6 +11,7 @@ initialize()
 function initialize() {
     loadTable();
     $('#customerId').val(customers.length + 1);
+    setCustomerIds(customers)
 }
 
 function loadTable() {
