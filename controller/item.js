@@ -10,12 +10,12 @@ initialize()
 
 
 function initialize() {
-    loadTable();
+    loadItemTable();
     $('#itemCode').val(items.length + 1);
     setItemIds(items)
 }
 
-function loadTable() {
+export function loadItemTable() {
     $('#item_table').empty();
 
     items.map((item, index) => {

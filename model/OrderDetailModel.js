@@ -5,7 +5,9 @@ export class OrderDetailModel{
         this._qty = qty;
         this._unitPrice = unitPrice;
         this._total = total;
+
     }
+
 
     get orderId() {
         return this._orderId;
