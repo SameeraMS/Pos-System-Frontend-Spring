@@ -377,19 +377,19 @@
                         <form>
                             <div class="mb-3">
                                 <label for="order_detail_id" class="form-label">Order Id</label>
-                                <input type="text" class="form-control" id="order_detail_id">
+                                <input type="text" class="form-control" id="order_detail_id" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="order_detail_customer_id" class="form-label">Customer Id</label>
-                                <input type="text" class="form-control" id="order_detail_customer_id">
+                                <input type="text" class="form-control" id="order_detail_customer_id" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="order_details_date" class="form-label">Order Date</label>
-                                <input type="date" class="form-control" id="order_details_date">
+                                <input type="date" class="form-control" id="order_details_date" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="order_details_discount" class="form-label">Discount</label>
-                                <input type="text" class="form-control" id="order_details_discount">
+                                <input type="text" class="form-control" id="order_details_discount" disabled>
                             </div>
                         </form>
                     </div>
@@ -397,7 +397,7 @@
                     <div class="col col-lg-6 col-md-12 col-sm-12 col-12">
                         <div id="order_detail_search" class="search mb-4 mt-4 d-flex flex-row align-items-end">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="search" class="form-control" placeholder="Search">
+                            <input type="search" class="form-control" placeholder="Search" id="order_search">
                             <select class="form-select" aria-label="Default select example">
                                 <option selected>orderId</option>
                             </select>
@@ -411,7 +411,7 @@
                                 <th scope="col">Total</th>
                             </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody id="order_table"></tbody>
                         </table>
                     </div>
                 </div>
@@ -429,7 +429,7 @@
                             <th scope="col">Total</th>
                         </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="order_detail_table"></tbody>
                     </table>
                 </div>
             </div>

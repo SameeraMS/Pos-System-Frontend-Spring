@@ -4,9 +4,7 @@ import {items} from "../db/db.js";
 import {orders} from "../db/db.js";
 import {orderDetails} from "../db/db.js";
 import {OrderDetailModel} from "../model/OrderDetailModel.js";
-/*
-import {loadItemTable} from "./item.js";
-*/
+import {loadOrderTable} from "./orderDetails.js";
 
 var index = 0;
 var current_id = orders.length + 1;
@@ -179,8 +177,9 @@ discount.on('input', () => {
 });
 
 $('tbody').on('click', '.cart_remove', function() {
-    const itemId = $(this).data('id');
-    const index = cart.findIndex(cartItem => cartItem.itemId === itemId);
+    const item_Id = $(this).data('id');
+    console.log(item_Id)
+    const index = item_Id - 1;
 
             if (index !== -1) {
                 cart.splice(index, 1);
@@ -203,6 +202,7 @@ order_btn.on('click', () => {
 
                 let order = new OrderModel(orderId, order_date, discountValue, subTotal, customerId);
                 orders.push(order);
+                loadOrderTable();
 
                         cart.forEach((cart_item) => {
                             let order_detail = new OrderDetailModel(orderId, cart_item.itemId, cart_item.qty, cart_item.unitPrice, cart_item.total);
@@ -221,8 +221,9 @@ order_btn.on('click', () => {
 
 
                                         alert("Order is placed successfully");
+                                        initialize();
 
-console.log(orderDetails);
+                                        console.log(orderDetails);
 
             } else {
                 alert("please add items to cart");
