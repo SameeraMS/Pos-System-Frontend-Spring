@@ -11,7 +11,12 @@ initialize()
 
 function initialize() {
     loadItemTable();
-    $('#itemCode').val(items.length + 1);
+
+    if (items.length == 0) {
+        $('#itemCode').val(1);
+    } else {
+        $('#itemCode').val(parseInt(items[items.length-1].itemCode) + 1);
+    }
     setItemIds(items)
 }
 

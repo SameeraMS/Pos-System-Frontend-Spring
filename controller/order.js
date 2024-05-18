@@ -33,7 +33,11 @@ const order_btn = $('.order_btn');
 initialize()
 
 function initialize() {
-    $('#order_Id').val(orders.length + 1);
+    if (orders.length == 0) {
+        order_id.val(1);
+    } else {
+        order_id.val(parseInt(orders[orders.length - 1].orderId) + 1);
+    }
     setCustomerIds(customers)
 }
 

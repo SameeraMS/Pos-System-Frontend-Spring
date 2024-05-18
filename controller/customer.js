@@ -10,7 +10,13 @@ initialize()
 
 function initialize() {
     loadTable();
-    $('#customerId').val(customers.length + 1);
+
+    if (customers.length == 0) {
+        $('#customerId').val(1);
+    } else {
+        $('#customerId').val(parseInt(customers[customers.length - 1].id) + 1);
+    }
+
     setCustomerIds(customers)
 }
 
