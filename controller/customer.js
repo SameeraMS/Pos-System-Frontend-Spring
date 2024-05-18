@@ -49,13 +49,23 @@ $('#customer_submit').on('click', () => {
         var address = $('#address').val();
         var phone = $('#contact').val();
 
-        let customer = new CustomerModel(id,name,address,phone);
-        customers.push(customer);
-        console.log(customer);
+
+        if (id == "" || name == "" || address == "" || phone == "") {
+            alert("Please fill all the fields");
+        } else if (!addressPattern.test(address)) {
+            alert("Please enter a valid address");
+        } else if (!mobilePattern.test(phone)) {
+            alert("Please enter a valid phone number");
+        } else {
+            let customer = new CustomerModel(id,name,address,phone);
+            customers.push(customer);
+            console.log(customer);
 
 
-        $('#customer_reset').click();
-        initialize()
+            $('#customer_reset').click();
+            initialize()
+        }
+
 });
 
 $('#customer_table').on('click','tr', function () {
@@ -73,6 +83,14 @@ $('#customer_table').on('click','tr', function () {
 
 
 $(`#customer_update`).on(`click`, () => {
+
+    if (id == "" || name == "" || address == "" || phone == "") {
+        alert("Please fill all the fields");
+    } else if (!addressPattern.test(address)) {
+        alert("Please enter a valid address");
+    } else if (!mobilePattern.test(phone)) {
+        alert("Please enter a valid phone number");
+    } else {
         console.log(customers[index])
         customers[index].id = $('#customerId').val();
         customers[index].name = $('#fullname').val();
@@ -81,6 +99,8 @@ $(`#customer_update`).on(`click`, () => {
 
         $('#customer_reset').click();
         initialize()
+    }
+
 })
 
 $('#customer_delete').on('click',  () => {
@@ -112,3 +132,12 @@ $("#searchCustomer").on("input", function() {
         }
     })
 });
+
+
+
+
+const addressPattern = /^[a-zA-Z0-9\s,'-]*$/
+const mobilePattern = /^(?:\+94|94|0)?7\d{8}$/
+
+
+

@@ -49,12 +49,20 @@ $('#item_submit').on('click', () => {
     var unit_price = $('#unitPrice').val();
     var qty = $('#qty').val();
 
-    let item = new ItemModel(id,desc,unit_price,qty);
-    items.push(item);
+
+    if (desc == '' || unit_price == '' || qty == '') {
+        alert('Please fill all the fields');
+    } else if (!pricePattern.test(unit_price)) {
+        alert('Please enter a valid price');
+    } else {
+        let item = new ItemModel(id,desc,unit_price,qty);
+        items.push(item);
 
 
-    $('#item_reset').click();
-    initialize()
+        $('#item_reset').click();
+        initialize()
+    }
+
 });
 
 $('#item_table').on('click','tr', function () {
@@ -72,14 +80,22 @@ $('#item_table').on('click','tr', function () {
 
 
 $(`#item_update`).on(`click`, () => {
-    console.log(items[index])
-    items[index].itemCode = $('#itemCode').val();
-    items[index].description = $('#description').val();
-    items[index].unitPrice = $('#unitPrice').val();
-    items[index].qty = $('#qty').val();
 
-    $('#item_reset').click();
-    initialize()
+    if (desc == '' || unit_price == '' || qty == '') {
+        alert('Please fill all the fields');
+    } else if (!pricePattern.test(unit_price)) {
+        alert('Please enter a valid price');
+    } else {
+        console.log(items[index])
+        items[index].itemCode = $('#itemCode').val();
+        items[index].description = $('#description').val();
+        items[index].unitPrice = $('#unitPrice').val();
+        items[index].qty = $('#qty').val();
+
+        $('#item_reset').click();
+        initialize()
+    }
+
 })
 
 $('#item_delete').on('click',  () => {
@@ -116,3 +132,4 @@ $("#searchItem").on("input", function() {
 });
 
 
+const pricePattern = /^\$?\d+(\.\d{2})?$/
