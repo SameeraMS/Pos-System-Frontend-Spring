@@ -81,9 +81,9 @@ $('#item_table').on('click','tr', function () {
 
 $(`#item_update`).on(`click`, () => {
 
-    if (desc == '' || unit_price == '' || qty == '') {
+    if ($('#description').val() == '' || $('#unitPrice').val() == '' || $('#qty').val() == '') {
         alert('Please fill all the fields');
-    } else if (!pricePattern.test(unit_price)) {
+    } else if (!pricePattern.test($('#unitPrice').val())) {
         alert('Please enter a valid price');
     } else {
         console.log(items[index])

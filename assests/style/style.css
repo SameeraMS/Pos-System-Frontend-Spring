@@ -1,22 +1,24 @@
 
 :root{
-    /*
-    --primary: linear-gradient(90deg, #103ce7 6.54%, #64e9ff 92.06%);
-    */
-    --primary: #103ce7;
-    --font-color: #2c3f5e;
+    --primary: #5a78ee;
+    --font-color: white;
     --font-grey: #C7C7C7;
     --accent-color: #4a4ac0;
 }
 
 body{
-    background: #dde8f1;
+    background: #2D333D;
+}
+
+label, span{
+    color: var(--font-color);
 }
 
 .navbar{
     width: 100%;
-    background-color: white;
+    background-color: #2D333D;
     border-radius: 15px;
+    margin-top: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -88,15 +90,20 @@ section:first-child{
     border: none;
     border-radius: 30px;
     padding: 20px;
+    background-color: rgba(0, 0, 0, 0.36);
 }
 
 .card-title{
+    right: 40px;
+    top: 20px;
+    position: absolute;
     color: var(--font-grey);
     font-size: 20px;
 }
 
 .count{
-    color: var(--font-color);
+    color: white;
+    margin-top: 30px;
     font-size: 28px;
     font-weight: bold;
 }
@@ -111,7 +118,7 @@ section:first-child{
 
 .link-page{
     position: absolute;
-    right: 10%;
+    left: 10%;
     bottom: 10%;
     text-decoration: none;
     color: var(--accent-color);
@@ -120,7 +127,7 @@ section:first-child{
 }
 
 .header{
-    color: var(--font-color);
+    color: white;
     margin-top: 100px;
 }
 
@@ -130,13 +137,6 @@ th[scope = 'col']{
     text-align: center;
 }
 
-th[scope = 'col']:first-child{
-    border-radius: 15px 0 0 15px;
-}
-
-th[scope = 'col']:last-child{
-    border-radius: 0 15px 15px 0;
-}
 
 td, th[scope = 'row']{
     text-align: center;
@@ -175,7 +175,7 @@ td, th[scope = 'row']{
 }
 
 .order_container{
-    background: #ffffff;
+    background: rgba(0, 0, 0, 0.36);
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2);

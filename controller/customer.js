@@ -84,11 +84,11 @@ $('#customer_table').on('click','tr', function () {
 
 $(`#customer_update`).on(`click`, () => {
 
-    if (id == "" || name == "" || address == "" || phone == "") {
+    if ($('#fullname').val() == "" || $('#address').val() == "" || $('#contact').val() == "") {
         alert("Please fill all the fields");
-    } else if (!addressPattern.test(address)) {
+    } else if (!addressPattern.test($('#address').val())) {
         alert("Please enter a valid address");
-    } else if (!mobilePattern.test(phone)) {
+    } else if (!mobilePattern.test($('#contact').val())) {
         alert("Please enter a valid phone number");
     } else {
         console.log(customers[index])
