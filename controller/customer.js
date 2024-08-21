@@ -1,5 +1,5 @@
 import CustomerModel from "../model/CutomerModel.js";
-import {customers, items} from "../db/db.js";
+import {customers} from "../db/db.js";
 import {setCustomerIds} from "./order.js";
 
 
@@ -9,19 +9,43 @@ initialize()
 
 
 function initialize() {
-    loadTable();
 
-    if (customers.length == 0) {
-        $('#customerId').val(1);
-    } else {
-        $('#customerId').val(parseInt(customers[customers.length - 1].id) + 1);
-    }
+    $.ajax({
+        url: "http://localhost:8082/customer",
+        type: "GET",
+        data: { "nextid": "nextid" },
+        success: (res) => {
+            console.log(res);
+            $('#customerId').val(JSON.stringify(res));
+            console.log("ok");
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
+
+
+    loadTable();
 
     setCustomerIds(customers)
 }
 
 function loadTable() {
     $('#customer_table').empty();
+
+    $.ajax({
+        url: "http://localhost:8082/customer",
+        type: "GET",
+        data: {"all": "true"},
+        success: (res) => {
+            customers = res;
+            console.log("ok");
+            console.log(JSON.stringify(res));
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
 
     customers.map((customer, index) => {
         var id = customer.id;
@@ -43,12 +67,25 @@ function loadTable() {
 
 }
 
+
 $('#customer_submit').on('click', () => {
         var id = $('#customerId').val();
         var name = $('#fullname').val();
         var address = $('#address').val();
         var phone = $('#contact').val();
 
+    $.ajax({
+        url: "http://localhost:8082/customer",
+        type: "GET",
+        parameters: {"all": "true"},
+        success: (res) => {
+            customers = res;
+            console.log(JSON.stringify(res));
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
 
         if (id == "" || name == "" || address == "" || phone == "") {
             alert("Please fill all the fields");
@@ -58,8 +95,31 @@ $('#customer_submit').on('click', () => {
             alert("Please enter a valid phone number");
         } else {
             let customer = new CustomerModel(id,name,address,phone);
+            let contact = phone;
+            let cus = {id,name,address,contact};
+
+
+            let jsonCustomer = JSON.stringify(cus);
+            console.log(jsonCustomer);
+
+            $.ajax({
+                url: "http://localhost:8082/customer",
+                type: "POST",
+                data: jsonCustomer,
+                headers: { "Content-Type": "application/json" },
+                success: (res) => {
+                    console.log(JSON.stringify(res));
+                    Swal.fire({
+                        title: JSON.stringify(res),
+                        icon: "success"
+                    });
+                },
+                error: (res) => {
+                    console.error(res);
+                }
+            });
+
             customers.push(customer);
-            console.log(customer);
 
 
             $('#customer_reset').click();

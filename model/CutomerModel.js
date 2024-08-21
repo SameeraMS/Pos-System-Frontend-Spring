@@ -1,9 +1,9 @@
 export default class CustomerModel {
-    constructor(id, name, address, phone) {
+    constructor(id, name, address, contact) {
         this._id = id
         this._name = name
         this._address = address
-        this._phone = phone;
+        this._contact = contact;
     }
 
 
@@ -31,11 +31,11 @@ export default class CustomerModel {
         this._address = value;
     }
 
-    get phone() {
-        return this._phone;
+    get contact() {
+        return this._contact;
     }
 
-    set phone(value) {
-        this._phone = value;
+    set contact(value) {
+        this._contact = value;
     }
 }
