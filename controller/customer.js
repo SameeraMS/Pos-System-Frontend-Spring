@@ -1,9 +1,5 @@
 import CustomerModel from "../model/CutomerModel.js";
-import {customers} from "../db/db.js";
 import {setCustomerIds} from "./order.js";
-
-
-var index = 0;
 
 initialize()
 
@@ -15,9 +11,8 @@ function initialize() {
         type: "GET",
         data: { "nextid": "nextid" },
         success: (res) => {
-            console.log(res);
-            $('#customerId').val(JSON.stringify(res));
-            console.log("ok");
+            let code = res.substring(1, res.length -1);
+            $('#customerId').val(code);
         },
         error: (res) => {
             console.error(res);
@@ -25,9 +20,8 @@ function initialize() {
     });
 
 
-    loadTable();
+    // loadTable();
 
-    setCustomerIds(customers)
 }
 
 function loadTable() {
@@ -38,7 +32,7 @@ function loadTable() {
         type: "GET",
         data: {"all": "true"},
         success: (res) => {
-            customers = res;
+            var customers = res;
             console.log("ok");
             console.log(JSON.stringify(res));
         },
@@ -72,35 +66,26 @@ $('#customer_submit').on('click', () => {
         var id = $('#customerId').val();
         var name = $('#fullname').val();
         var address = $('#address').val();
-        var phone = $('#contact').val();
+        var contact = $('#contact').val();
 
-    $.ajax({
-        url: "http://localhost:8082/customer",
-        type: "GET",
-        parameters: {"all": "true"},
-        success: (res) => {
-            customers = res;
-            console.log(JSON.stringify(res));
-        },
-        error: (res) => {
-            console.error(res);
-        }
-    });
-
-        if (id == "" || name == "" || address == "" || phone == "") {
-            alert("Please fill all the fields");
+        if (id == "" || name == "" || address == "" || contact == "") {
+            Swal.fire({
+                title: "Please fill all the fields",
+                icon: "warning"
+            });
         } else if (!addressPattern.test(address)) {
-            alert("Please enter a valid address");
-        } else if (!mobilePattern.test(phone)) {
-            alert("Please enter a valid phone number");
+            Swal.fire({
+                title: "Please enter a valid address",
+                icon: "warning"
+            });
+        } else if (!mobilePattern.test(contact)) {
+            Swal.fire({
+                title: "Please enter a valid phone number",
+                icon: "warning"
+            });
         } else {
-            let customer = new CustomerModel(id,name,address,phone);
-            let contact = phone;
-            let cus = {id,name,address,contact};
-
-
-            let jsonCustomer = JSON.stringify(cus);
-            console.log(jsonCustomer);
+            let customer = new CustomerModel(id,name,address,contact);
+            let jsonCustomer = JSON.stringify(customer);
 
             $.ajax({
                 url: "http://localhost:8082/customer",
@@ -119,9 +104,6 @@ $('#customer_submit').on('click', () => {
                 }
             });
 
-            customers.push(customer);
-
-
             $('#customer_reset').click();
             initialize()
         }
@@ -129,7 +111,6 @@ $('#customer_submit').on('click', () => {
 });
 
 $('#customer_table').on('click','tr', function () {
-    index = $(this).index();
     let id = $(this).find('.cus-id-val').text();
     let name = $(this).find('.cus-fname-val').text();
     let address = $(this).find('.cus-address-val').text();
@@ -151,6 +132,37 @@ $(`#customer_update`).on(`click`, () => {
     } else if (!mobilePattern.test($('#contact').val())) {
         alert("Please enter a valid phone number");
     } else {
+        var id = $('#customerId').val();
+        var name = $('#fullname').val();
+        var address = $('#address').val();
+        var contact = $('#contact').val();
+
+        let cus = {id,name,address,contact};
+
+        let jsonCustomer = JSON.stringify(cus);
+        console.log(jsonCustomer);
+
+        $.ajax({
+            url: "http://localhost:8082/customer",
+            type: "PUT",
+            data: jsonCustomer,
+            headers: { "Content-Type": "application/json" },
+            success: (res) => {
+                console.log(JSON.stringify(res));
+                Swal.fire({
+                    title: JSON.stringify(res),
+                    icon: "success"
+                });
+            },
+            error: (res) => {
+                console.error(res);
+                Swal.fire({
+                    title: JSON.stringify(res),
+                    icon: "error"
+                });
+            }
+        });
+
         console.log(customers[index])
         customers[index].id = $('#customerId').val();
         customers[index].name = $('#fullname').val();
@@ -165,6 +177,27 @@ $(`#customer_update`).on(`click`, () => {
 
 $('#customer_delete').on('click',  () => {
     customers.splice(index, 1);
+
+    var id = $('#customerId').val();
+    console.log(id)
+    $.ajax({
+        url: "http://localhost:8082/customer?id=" + id,
+        type: "DELETE",
+        success: (res) => {
+            console.log(JSON.stringify(res));
+            Swal.fire({
+                title: JSON.stringify(res),
+                icon: "success"
+            });
+        },
+        error: (res) => {
+            console.error(res);
+            Swal.fire({
+                title: JSON.stringify(res),
+                icon: "error"
+            });
+        }
+    });
     $('#customer_reset').click();
     initialize()
 })
