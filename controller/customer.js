@@ -1,26 +1,29 @@
 import CustomerModel from "../model/CutomerModel.js";
 import {setCustomerIds} from "./order.js";
 
+
 initialize()
+
 
 
 function initialize() {
 
-        $.ajax({
-            url: "http://localhost:8082/customer",
-            type: "GET",
-            data: {"nextid": "nextid"},
-            success: (res) => {
-                let code = res.substring(1, res.length - 1);
-                $('#customerId').val(code);
-            },
-            error: (res) => {
-                console.error(res);
-            }
-        });
+    $.ajax({
+        url: "http://localhost:8082/customer",
+        type: "GET",
+        data: {"nextid": "nextid"},
+        success: (res) => {
+            let code = res.substring(1, res.length - 1);
+            $('#customerId').val(code);
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
 
-
-     loadTable();
+    setTimeout(() => {
+        loadTable();
+    },1000)
 
 }
 
@@ -41,24 +44,13 @@ function loadTable() {
             console.log(customersArray);
 
             customersArray.map((customer, index) => {
-                var id = customer.id;
-                var name = customer.name;
-                var address = customer.address;
-                var contact = customer.contact;
-
-                console.log(id)
-                console.log(name)
-                console.log(address)
-                console.log(contact)
 
                 var record = `<tr>
-                    <td class="cus-id-val">${id}</td>
-                    <td class="cus-fname-val">${name}</td>
-                    <td class="cus-address-val">${address}</td>
-                    <td class="cus-contact-val">${contact}</td>
+                    <td class="cus-id-val">${customer.id}</td>
+                    <td class="cus-fname-val">${customer.name}</td>
+                    <td class="cus-address-val">${customer.address}</td>
+                    <td class="cus-contact-val">${customer.contact}</td>
                 </tr>`;
-
-                console.log(record)
 
                 $('#customer_table').append(record);
             });
@@ -69,9 +61,8 @@ function loadTable() {
         }
     });
 
-
-
 }
+
 
 
 $('#customer_submit').on('click', () => {
@@ -122,10 +113,11 @@ $('#customer_submit').on('click', () => {
                 initialize();
             },1000)
 
-
         }
 
 });
+
+
 
 $('#customer_table').on('click','tr', function () {
     let id = $(this).find('.cus-id-val').text();
@@ -140,14 +132,24 @@ $('#customer_table').on('click','tr', function () {
 });
 
 
+
 $(`#customer_update`).on(`click`, () => {
 
     if ($('#fullname').val() == "" || $('#address').val() == "" || $('#contact').val() == "") {
-        alert("Please fill all the fields");
+        Swal.fire({
+            title: "Please fill all the fields",
+            icon: "warning"
+        });
     } else if (!addressPattern.test($('#address').val())) {
-        alert("Please enter a valid address");
+        Swal.fire({
+            title: "Please enter a valid address",
+            icon: "warning"
+        });
     } else if (!mobilePattern.test($('#contact').val())) {
-        alert("Please enter a valid phone number");
+        Swal.fire({
+            title: "Please enter a valid phone number",
+            icon: "warning"
+        });
     } else {
         var id = $('#customerId').val();
         var name = $('#fullname').val();
@@ -180,23 +182,20 @@ $(`#customer_update`).on(`click`, () => {
             }
         });
 
-        console.log(customers[index])
-        customers[index].id = $('#customerId').val();
-        customers[index].name = $('#fullname').val();
-        customers[index].address = $('#address').val();
-        customers[index].phone = $('#contact').val();
-
         $('#customer_reset').click();
-        initialize()
+
+        setTimeout(() => {
+            initialize();
+        },1000)
     }
 
 })
 
+
+
 $('#customer_delete').on('click',  () => {
-    customers.splice(index, 1);
 
     var id = $('#customerId').val();
-    console.log(id)
     $.ajax({
         url: "http://localhost:8082/customer?id=" + id,
         type: "DELETE",
@@ -216,33 +215,52 @@ $('#customer_delete').on('click',  () => {
         }
     });
     $('#customer_reset').click();
-    initialize()
+
+    setTimeout(() => {
+        initialize();
+    },1000)
 })
+
+
+
 
 $("#searchCustomer").on("input", function() {
     var typedText = $("#searchCustomer").val();
-    customers.map((customer, index) => {
-        if (typedText == "") {
-            loadTable()
-        }
 
-        if (typedText == customer.id) {
-            var select_index = index;
+    $.ajax({
+        url: "http://localhost:8082/customer",
+        type: "GET",
+        data: {"search": typedText},
+        success: (res) => {
+            console.log(res);
+            let searchArray = JSON.parse(res);
+            console.log(searchArray);
 
             $('#customer_table').empty();
 
-            var record = `<tr>
-                <td class="cus-id-val">${customers[select_index].id}</td>
-                <td class="cus-fname-val">${customers[select_index].name}</td>
-                <td class="cus-address-val">${customers[select_index].address}</td>
-                <td class="cus-contact-val">${customers[select_index].phone}</td>
-            </tr>`;
+            searchArray.map((customer, index) => {
 
-            $('#customer_table').append(record);
+                var record = `<tr>
+                    <td class="cus-id-val">${customer.id}</td>
+                    <td class="cus-fname-val">${customer.name}</td>
+                    <td class="cus-address-val">${customer.address}</td>
+                    <td class="cus-contact-val">${customer.contact}</td>
+                </tr>`;
+
+                $('#customer_table').append(record);
+            });
+        },
+        error: (res) => {
+            console.error(res);
         }
-    })
+    });
 });
 
+
+
+$('#customer_reset').on('click', () => {
+    initialize()
+})
 
 
 
