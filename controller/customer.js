@@ -6,58 +6,70 @@ initialize()
 
 function initialize() {
 
-    $.ajax({
-        url: "http://localhost:8082/customer",
-        type: "GET",
-        data: { "nextid": "nextid" },
-        success: (res) => {
-            let code = res.substring(1, res.length -1);
-            $('#customerId').val(code);
-        },
-        error: (res) => {
-            console.error(res);
-        }
-    });
+        $.ajax({
+            url: "http://localhost:8082/customer",
+            type: "GET",
+            data: {"nextid": "nextid"},
+            success: (res) => {
+                let code = res.substring(1, res.length - 1);
+                $('#customerId').val(code);
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
 
 
-    // loadTable();
+     loadTable();
 
 }
+
+
 
 function loadTable() {
     $('#customer_table').empty();
 
+    let customersArray = [];
+
     $.ajax({
         url: "http://localhost:8082/customer",
         type: "GET",
-        data: {"all": "true"},
+        data: {"all": "getAll"},
         success: (res) => {
-            var customers = res;
-            console.log("ok");
-            console.log(JSON.stringify(res));
+            console.log(res);
+            customersArray = JSON.parse(res);
+            console.log(customersArray);
+
+            customersArray.map((customer, index) => {
+                var id = customer.id;
+                var name = customer.name;
+                var address = customer.address;
+                var contact = customer.contact;
+
+                console.log(id)
+                console.log(name)
+                console.log(address)
+                console.log(contact)
+
+                var record = `<tr>
+                    <td class="cus-id-val">${id}</td>
+                    <td class="cus-fname-val">${name}</td>
+                    <td class="cus-address-val">${address}</td>
+                    <td class="cus-contact-val">${contact}</td>
+                </tr>`;
+
+                console.log(record)
+
+                $('#customer_table').append(record);
+            });
+
         },
         error: (res) => {
             console.error(res);
         }
     });
 
-    customers.map((customer, index) => {
-        var id = customer.id;
-        var name = customer.name;
-        var address = customer.address;
-        var phone = customer.phone;
 
-        var record = `<tr>
-        <td class="cus-id-val">${id}</td>
-        <td class="cus-fname-val">${name}</td>
-        <td class="cus-address-val">${address}</td>
-        <td class="cus-contact-val">${phone}</td>
-    </tr>`;
-
-        console.log(record)
-
-        $('#customer_table').append(record);
-    });
 
 }
 
@@ -105,7 +117,12 @@ $('#customer_submit').on('click', () => {
             });
 
             $('#customer_reset').click();
-            initialize()
+
+            setTimeout(() => {
+                initialize();
+            },1000)
+
+
         }
 
 });
