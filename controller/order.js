@@ -2,7 +2,6 @@ import {OrderModel} from "../model/OrderModel.js";
 import {OrderDetailModel} from "../model/OrderDetailModel.js";
 import {loadOrderTable} from "./orderDetails.js";
 
-var customers = [];
 let cart = [];
 
 const order_id = $('#order_Id');
@@ -10,7 +9,6 @@ const customer_id = $('#custId');
 const date = $('#orderDate');
 const item_Id = $('#item_Id');
 const order_qty = $('#order_quantity');
-
 const customer_name = $('#custName');
 const qty_on_hand = $('#qtyOnHand');
 const description = $('#desc');
@@ -25,44 +23,97 @@ const cart_btn = $('.cart_btn');
 const order_btn = $('.order_btn');
 
 
-initialize()
+
+initialize();
+
 
 function initialize() {
-
-
+    setOrderId();
 }
+
+
+function setOrderId() {
+    $.ajax({
+        url: "http://localhost:8082/order",
+        type: "GET",
+        data: {"nextid": "nextid"},
+        success: (res) => {
+            let code = res.substring(1, res.length - 1);
+            $('#order_Id').val(code);
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
+}
+
 
 export function setCustomerIds(data) {
     customer_id.empty();
     customer_id.append('<option selected>select the customer</option>');
 
     for (let i = 0; i < data.length; i++) {
-        customer_id.append('<option value="' + (i + 1) + '">' + data[i].id + '</option>');
+        customer_id.append('<option value="' + data[i].id + '">' + data[i].id + '</option>');
     }
 }
+
 
 export function setItemIds(data) {
     item_Id.empty();
     item_Id.append('<option selected>select the item</option>');
 
     for (let i = 0; i < data.length; i++) {
-        item_Id.append('<option value="' + (i + 1) + '">' + data[i].id + '</option>');
+        item_Id.append('<option value ="' + data[i].id + '">' + data[i].id + '</option>');
     }
 }
 
+
 customer_id.on('input', () => {
     if (customer_id.val() !== 'select the customer'){
-        customer_name.val(customers[customer_id.val() - 1].name);
+
+        $.ajax({
+            url: "http://localhost:8082/customer",
+            type: "GET",
+            data: {"id": customer_id.val() },
+            success: (res) => {
+                console.log(res);
+                let search = JSON.parse(res);
+                console.log(search);
+
+                customer_name.val(search.name);
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
+
     }else{
         customer_name.val('');
     }
 });
 
+
 item_Id.on('input', () => {
-    if (item_Id.val() !== 'select the customer'){
-        description.val(items[item_Id.val() - 1].description);
-        qty_on_hand.val(items[item_Id.val() - 1].qty);
-        unit_price.val(items[item_Id.val() - 1].unitPrice);
+    if (item_Id.val() !== 'select the item'){
+
+        $.ajax({
+            url: "http://localhost:8082/item",
+            type: "GET",
+            data: {"id": item_Id.val() },
+            success: (res) => {
+                console.log(res);
+                let search = JSON.parse(res);
+                console.log(search);
+
+                description.val(search.description);
+                qty_on_hand.val(search.qty);
+                unit_price.val(search.unitPrice);
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
+
     }else{
         description.val('');
         qty_on_hand.val('');
@@ -70,9 +121,11 @@ item_Id.on('input', () => {
     }
 });
 
+
 //set date
 const formattedDate = new Date().toISOString().substr(0, 10);
 date.val(formattedDate);
+
 
 //add to cart
 cart_btn.on('click', () => {
@@ -104,10 +157,14 @@ cart_btn.on('click', () => {
                 clearItemSection();
             }
         } else {
-            alert("not enough quantity in stock");
+            Swal.fire({
+                title: "not enough quantity in stock",
+                icon: "warning"
+            });
         }
 
 });
+
 
 function loadCart() {
     $('tbody').eq(2).empty();
@@ -124,6 +181,7 @@ function loadCart() {
     });
 }
 
+
 function setTotalValues(){
     let netTotal = calculateTotal();
     net_total.text(`${netTotal}/=`);
@@ -133,6 +191,7 @@ function setTotalValues(){
     sub_total.text(`${netTotal - discountAmount}/=`);
 }
 
+
 function calculateTotal(){
     let netTotal = 0;
     cart.map((cart_item) => {
@@ -140,6 +199,7 @@ function calculateTotal(){
     });
     return netTotal;
 }
+
 
 function clearItemSection() {
     item_Id.val('select the item');
@@ -149,13 +209,16 @@ function clearItemSection() {
     order_qty.val('');
 }
 
+
 function setBalance(){
     let subTotal = parseFloat(sub_total.text());
     let cashAmount = parseFloat(cash.val());
     balance.val(cashAmount - subTotal);
 }
 
+
 cash.on('input', () => setBalance());
+
 
 //set sub total value
 discount.on('input', () => {
@@ -171,6 +234,7 @@ discount.on('input', () => {
     setBalance();
 });
 
+
 $('tbody').on('click', '.cart_remove', function() {
     const item_Id = $(this).data('id');
     console.log(item_Id)
@@ -184,6 +248,7 @@ $('tbody').on('click', '.cart_remove', function() {
 
 });
 
+
 order_btn.on('click', () => {
     let orderId = order_id.val();
     let order_date = date.val();
@@ -196,35 +261,57 @@ order_btn.on('click', () => {
             if (cart.length !== 0) {
 
                 let order = new OrderModel(orderId, order_date, discountValue, subTotal, customerId);
-                orders.push(order);
-                loadOrderTable();
+                let jsonOrder = JSON.stringify(order);
 
-                        cart.forEach((cart_item) => {
-                            let order_detail = new OrderDetailModel(orderId, cart_item.itemId, cart_item.qty, cart_item.unitPrice, cart_item.total);
-                            orderDetails.push(order_detail);
+                console.log(jsonOrder);
+
+                $.ajax({
+                    url: "http://localhost:8082/order",
+                    type: "POST",
+                    data: jsonOrder,
+                    headers: { "Content-Type": "application/json" },
+                    success: (res) => {
+                        console.log(JSON.stringify(res));
+                        Swal.fire({
+                            title: JSON.stringify(res),
+                            icon: "success"
                         });
-                                        cart.splice(0, cart.length);
-                                        loadCart();
-                                        clearItemSection();
-                                        customer_id.val('select the customer');
-                                        customer_name.val('');
-                                        discount.val('');
-                                        cash.val('');
-                                        balance.val('');
-                                        net_total.text('0/=');
-                                        sub_total.text('0/=');
+                    },
+                    error: (res) => {
+                        console.error(res);
+                    }
+                });
 
+                //loadOrderTable();
 
-                                        alert("Order is placed successfully");
-                                        initialize();
+                cart.forEach((cart_item) => {
+                    let order_detail = new OrderDetailModel(orderId, cart_item.itemId, cart_item.qty, cart_item.unitPrice, cart_item.total);
+                        //orderdetail api call here
+                });
 
-                                        console.log(orderDetails);
+                cart.splice(0, cart.length);
+                loadCart();
+                clearItemSection();
+                customer_id.val('select the customer');
+                customer_name.val('');
+                discount.val('');
+                cash.val('');
+                balance.val('');
+                net_total.text('0/=');
+                sub_total.text('0/=');
 
+                initialize();
             } else {
-                alert("please add items to cart");
+                Swal.fire({
+                    title: "please add items to cart",
+                    icon: "warning"
+                });
             }
         } else {
-            alert("Payment is not enough");
+            Swal.fire({
+                title: "Payment is not enough",
+                icon: "warning"
+            });
         }
 
 });
