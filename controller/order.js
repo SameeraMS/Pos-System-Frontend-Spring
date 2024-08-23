@@ -1,8 +1,4 @@
 import {OrderModel} from "../model/OrderModel.js";
-import {customers} from "../db/db.js";
-import {items} from "../db/db.js";
-import {orders} from "../db/db.js";
-import {orderDetails} from "../db/db.js";
 import {OrderDetailModel} from "../model/OrderDetailModel.js";
 import {loadOrderTable} from "./orderDetails.js";
 

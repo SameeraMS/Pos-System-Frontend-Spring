@@ -1,4 +1,3 @@
-import {customers, orders, orderDetails, items} from "../db/db.js";
 
 
 

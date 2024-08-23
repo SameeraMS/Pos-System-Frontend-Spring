@@ -1,47 +1,65 @@
 import ItemModel from "../model/ItemModel.js";
-import {items} from "../db/db.js";
-import {setItemIds} from "./order.js";
-
-
-var index = 0;
-var current_id = items.length + 1;
 
 initialize()
 
 
 function initialize() {
-    loadItemTable();
 
-    if (items.length == 0) {
-        $('#itemCode').val(1);
-    } else {
-        $('#itemCode').val(parseInt(items[items.length-1].itemCode) + 1);
-    }
-    setItemIds(items)
+    $.ajax({
+        url: "http://localhost:8082/item",
+        type: "GET",
+        data: {"nextid": "nextid"},
+        success: (res) => {
+            let code = res.substring(1, res.length - 1);
+            $('#itemCode').val(code);
+        },
+        error: (res) => {
+            console.error(res);
+        }
+    });
+
+    setTimeout(() => {
+        loadItemTable();
+    },1000)
 }
+
+
 
 export function loadItemTable() {
     $('#item_table').empty();
 
-    items.map((item, index) => {
-        var id = item.itemCode;
-        var desc = item.description;
-        var unit_price = item.unitPrice;
-        var qty = item.qty;
+    let itemArray = [];
 
-        var record = `<tr>
-        <td class="itm-id-val">${id}</td>
-        <td class="itm-desc-val">${desc}</td>
-        <td class="itm-unitPrice-val">${unit_price}</td>
-        <td class="itm-qty-val">${qty}</td>
-    </tr>`;
+    $.ajax({
+        url: "http://localhost:8082/item",
+        type: "GET",
+        data: {"all": "getAll"},
+        success: (res) => {
+            console.log(res);
+            itemArray = JSON.parse(res);
+            console.log(itemArray);
 
-        console.log(record)
+            itemArray.map((item, index) => {
 
-        $('#item_table').append(record);
+                var record = `<tr>
+                    <td class="itm-id-val">${item.id}</td>
+                    <td class="itm-desc-val">${item.description}</td>
+                    <td class="itm-unitPrice-val">${item.unitPrice}</td>
+                    <td class="itm-qty-val">${item.qty}</td>
+                </tr>`;
+
+                $('#item_table').append(record);
+            });
+
+        },
+        error: (res) => {
+            console.error(res);
+        }
     });
 
 }
+
+
 
 $('#item_submit').on('click', () => {
     var id = $('#itemCode').val();
@@ -51,22 +69,51 @@ $('#item_submit').on('click', () => {
 
 
     if (desc == '' || unit_price == '' || qty == '') {
-        alert('Please fill all the fields');
+        Swal.fire({
+            title: "Please fill all the fields",
+            icon: "warning"
+        });
     } else if (!pricePattern.test(unit_price)) {
-        alert('Please enter a valid price');
+        Swal.fire({
+            title: "Please enter a valid price",
+            icon: "warning"
+        });
     } else {
         let item = new ItemModel(id,desc,unit_price,qty);
-        items.push(item);
+        let jsonItem = JSON.stringify(item);
 
+        console.log(jsonItem);
+
+        $.ajax({
+            url: "http://localhost:8082/item",
+            type: "POST",
+            data: jsonItem,
+            headers: { "Content-Type": "application/json" },
+            success: (res) => {
+                console.log(JSON.stringify(res));
+                Swal.fire({
+                    title: JSON.stringify(res),
+                    icon: "success"
+                });
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
 
         $('#item_reset').click();
-        initialize()
+
+        setTimeout(() => {
+            initialize()
+        },1000)
+
     }
 
 });
 
+
+
 $('#item_table').on('click','tr', function () {
-    index = $(this).index();
     let id = $(this).find('.itm-id-val').text();
     let desc = $(this).find('.itm-desc-val').text();
     let unit_price = $(this).find('.itm-unitPrice-val').text();
@@ -79,57 +126,129 @@ $('#item_table').on('click','tr', function () {
 });
 
 
+
 $(`#item_update`).on(`click`, () => {
 
     if ($('#description').val() == '' || $('#unitPrice').val() == '' || $('#qty').val() == '') {
-        alert('Please fill all the fields');
+        Swal.fire({
+            title: "Please fill all the fields",
+            icon: "warning"
+        });
     } else if (!pricePattern.test($('#unitPrice').val())) {
-        alert('Please enter a valid price');
+        Swal.fire({
+            title: "Please enter a valid price",
+            icon: "warning"
+        });
     } else {
-        console.log(items[index])
-        items[index].itemCode = $('#itemCode').val();
-        items[index].description = $('#description').val();
-        items[index].unitPrice = $('#unitPrice').val();
-        items[index].qty = $('#qty').val();
+        var id = $('#itemCode').val();
+        var description = $('#description').val();
+        var unitPrice = $('#unitPrice').val();
+        var qty = $('#qty').val();
+
+        let item = new ItemModel(id,description,unitPrice,qty);
+        let jsonItem = JSON.stringify(item);
+
+        $.ajax({
+            url: "http://localhost:8082/item",
+            type: "PUT",
+            data: jsonItem,
+            headers: { "Content-Type": "application/json" },
+            success: (res) => {
+                console.log(JSON.stringify(res));
+                Swal.fire({
+                    title: JSON.stringify(res),
+                    icon: "success"
+                });
+            },
+            error: (res) => {
+                console.error(res);
+                Swal.fire({
+                    title: JSON.stringify(res),
+                    icon: "error"
+                });
+            }
+        });
 
         $('#item_reset').click();
-        initialize()
+
+        setTimeout(() => {
+            initialize()
+        },1000)
     }
 
 })
 
+
+
 $('#item_delete').on('click',  () => {
-    items.splice(index, 1);
+    var id = $('#itemCode').val();
+
+    $.ajax({
+        url: "http://localhost:8082/item?id=" + id,
+        type: "DELETE",
+        success: (res) => {
+            console.log(JSON.stringify(res));
+            Swal.fire({
+                title: JSON.stringify(res),
+                icon: "success"
+            });
+        },
+        error: (res) => {
+            console.error(res);
+            Swal.fire({
+                title: JSON.stringify(res),
+                icon: "error"
+            });
+        }
+    });
+
     $('#item_reset').click();
-    initialize()
+
+    setTimeout(() => {
+        initialize();
+    },1000)
+
 })
 
 
-$("#searchItem").on("input", function() {
-    console.log("hello");
-    var typedText = $("#searchItem").val();
-    items.map((item, index) => {
-        if (typedText == "") {
-                loadTable()
-        }
 
-        if (typedText == item.itemCode) {
-            var select_index = index;
+$("#searchItem").on("input", function() {
+    var typedText = $("#searchItem").val();
+
+    $.ajax({
+        url: "http://localhost:8082/item",
+        type: "GET",
+        data: {"search": typedText},
+        success: (res) => {
+            console.log(res);
+            let searchArray = JSON.parse(res);
+            console.log(searchArray);
 
             $('#item_table').empty();
 
-            var record = `<tr>
-               <td class="itm-id-val">${items[select_index].itemCode}</td>
-               <td class="itm-desc-val">${items[select_index].description}</td>
-               <td class="itm-unitPrice-val">${items[select_index].unitPrice}</td>
-               <td class="itm-qty-val">${items[select_index].qty}</td>
-            </tr>`;
+            searchArray.map((item, index) => {
 
-            console.log(record)
-            $('#item_table').append(record);
+                var record = `<tr>
+                    <td class="itm-id-val">${item.id}</td>
+                    <td class="itm-desc-val">${item.description}</td>
+                    <td class="itm-unitPrice-val">${item.unitPrice}</td>
+                    <td class="itm-qty-val">${item.qty}</td>
+                </tr>`;
+
+                $('#item_table').append(record);
+            });
+        },
+        error: (res) => {
+            console.error(res);
         }
-    })
+    });
 });
+
+
+
+$('#item_reset').on('click', () => {
+    initialize()
+})
 
 
 const pricePattern = /^\$?\d+(\.\d{2})?$/

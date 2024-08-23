@@ -1,5 +1,4 @@
 import CustomerModel from "../model/CutomerModel.js";
-import {setCustomerIds} from "./order.js";
 
 
 initialize()
@@ -157,9 +156,7 @@ $(`#customer_update`).on(`click`, () => {
         var contact = $('#contact').val();
 
         let cus = {id,name,address,contact};
-
         let jsonCustomer = JSON.stringify(cus);
-        console.log(jsonCustomer);
 
         $.ajax({
             url: "http://localhost:8082/customer",
