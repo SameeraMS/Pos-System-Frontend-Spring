@@ -1,4 +1,5 @@
 import ItemModel from "../model/ItemModel.js";
+import {setItemIds} from "./order.js";
 
 initialize()
 
@@ -38,6 +39,8 @@ export function loadItemTable() {
             console.log(res);
             itemArray = JSON.parse(res);
             console.log(itemArray);
+
+            setItemIds(itemArray);
 
             itemArray.map((item, index) => {
 

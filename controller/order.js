@@ -2,8 +2,7 @@ import {OrderModel} from "../model/OrderModel.js";
 import {OrderDetailModel} from "../model/OrderDetailModel.js";
 import {loadOrderTable} from "./orderDetails.js";
 
-var index = 0;
-var current_id = orders.length + 1;
+var customers = [];
 let cart = [];
 
 const order_id = $('#order_Id');
@@ -29,12 +28,8 @@ const order_btn = $('.order_btn');
 initialize()
 
 function initialize() {
-    if (orders.length == 0) {
-        order_id.val(1);
-    } else {
-        order_id.val(parseInt(orders[orders.length - 1].orderId) + 1);
-    }
-    setCustomerIds(customers)
+
+
 }
 
 export function setCustomerIds(data) {
@@ -51,7 +46,7 @@ export function setItemIds(data) {
     item_Id.append('<option selected>select the item</option>');
 
     for (let i = 0; i < data.length; i++) {
-        item_Id.append('<option value="' + (i + 1) + '">' + data[i].itemCode + '</option>');
+        item_Id.append('<option value="' + (i + 1) + '">' + data[i].id + '</option>');
     }
 }
 

@@ -1,4 +1,5 @@
 import CustomerModel from "../model/CutomerModel.js";
+import {setCustomerIds} from "./order.js";
 
 
 initialize()
@@ -23,7 +24,6 @@ function initialize() {
     setTimeout(() => {
         loadTable();
     },1000)
-
 }
 
 
@@ -41,6 +41,8 @@ function loadTable() {
             console.log(res);
             customersArray = JSON.parse(res);
             console.log(customersArray);
+
+            setCustomerIds(customersArray);
 
             customersArray.map((customer, index) => {
 
