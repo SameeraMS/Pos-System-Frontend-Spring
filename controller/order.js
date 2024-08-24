@@ -282,11 +282,27 @@ order_btn.on('click', () => {
                     }
                 });
 
-                //loadOrderTable();
+                loadOrderTable();
 
                 cart.forEach((cart_item) => {
                     let order_detail = new OrderDetailModel(orderId, cart_item.itemId, cart_item.qty, cart_item.unitPrice, cart_item.total);
-                        //orderdetail api call here
+                    let jsonOrderDetail = JSON.stringify(order_detail);
+
+                    setTimeout(() => {
+                        $.ajax({
+                            url: "http://localhost:8082/orderDetails",
+                            type: "POST",
+                            data: jsonOrderDetail,
+                            headers: { "Content-Type": "application/json" },
+                            success: (res) => {
+                                console.log(JSON.stringify(res));
+                            },
+                            error: (res) => {
+                                console.error(res);
+                            }
+                        });
+                    },1000)
+
                 });
 
                 cart.splice(0, cart.length);
