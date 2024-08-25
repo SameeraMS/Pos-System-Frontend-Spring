@@ -1,6 +1,7 @@
 import {OrderModel} from "../model/OrderModel.js";
 import {OrderDetailModel} from "../model/OrderDetailModel.js";
 import {loadOrderTable} from "./orderDetails.js";
+import {loadItemTable} from "./item.js";
 
 let cart = [];
 
@@ -315,6 +316,8 @@ order_btn.on('click', () => {
                 balance.val('');
                 net_total.text('0/=');
                 sub_total.text('0/=');
+
+                loadItemTable()
 
                 initialize();
             } else {
