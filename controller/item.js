@@ -54,6 +54,7 @@ export function loadItemTable() {
                 $('#item_table').append(record);
             });
 
+            $("#item_count").text(itemArray.length);
         },
         error: (res) => {
             console.error(res);

@@ -260,7 +260,6 @@ order_btn.on('click', () => {
 
         if (cashAmount >= subTotal) {
             if (cart.length !== 0) {
-
                 let order = new OrderModel(orderId, order_date, discountValue, subTotal, customerId);
                 let jsonOrder = JSON.stringify(order);
 
@@ -282,8 +281,6 @@ order_btn.on('click', () => {
                         console.error(res);
                     }
                 });
-
-                loadOrderTable();
 
                 cart.forEach((cart_item) => {
                     let order_detail = new OrderDetailModel(orderId, cart_item.itemId, cart_item.qty, cart_item.unitPrice, cart_item.total);
@@ -319,7 +316,11 @@ order_btn.on('click', () => {
 
                 loadItemTable()
 
-                initialize();
+                setTimeout( () => {
+                    initialize();
+                    loadOrderTable()
+                },1000)
+
             } else {
                 Swal.fire({
                     title: "please add items to cart",

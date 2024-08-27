@@ -27,6 +27,7 @@ export function loadOrderTable() {
                 $('#order_table').append(record);
             });
 
+            $("#order_count").text(ordersArray.length);
         },
         error: (res) => {
             console.error(res);

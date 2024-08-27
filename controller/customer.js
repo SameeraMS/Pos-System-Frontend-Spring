@@ -56,6 +56,7 @@ function loadTable() {
                 $('#customer_table').append(record);
             });
 
+            $(`#cus_count`).text(customersArray.length);
         },
         error: (res) => {
             console.error(res);
