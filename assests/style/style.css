@@ -218,9 +218,86 @@ td, th[scope = 'row']{
     border-radius: 10px;
 }
 
+canvas{
+    width: 100% !important;
+    height: 300px !important;
+}
+
+.prog-status{
+    margin: auto;
+    background: rgba(0, 0, 0, 0.36);
+    padding: 20px;
+    border-radius: 24px;
+}
+
+.prog-status{
+    width: 70%;
+}
+
+.prog-status .header{
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+.prog-status .header h4{
+    font-weight: 600;
+}
+
+.prog-status .header .tabs{
+    background: #000000;
+    padding: 4px;
+    border-radius: 20px;
+    display: flex;
+    gap: 5px;
+}
+
+.prog-status .header .tabs a{
+    padding: 4px 20px;
+    font-size: 12px;
+    color: white;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.prog-status .header .tabs a.active{
+    background: var(--accent-color);
+}
+
+.prog-status .details{
+    display: flex;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.prog-status .details .item h2{
+    color: white;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.prog-status .details .item p{
+    font-size: 13px;
+    color: white;
+}
+
+.prog-status .details .separator{
+    width: 2px;
+    height: 70px;
+    background: #f3f3f3;
+}
+
+
 @media all and (max-width: 992px) {
     .chart-card div{
         width: 300px;
+    }
+
+    .prog-status{
+        width: 100%;
     }
 }
 
@@ -240,10 +317,18 @@ td, th[scope = 'row']{
     .active-page:after{
         width: 0;
     }
+
+    .prog-status{
+        width: 100%;
+    }
 }
 
 @media all and (max-width: 576px) {
     .chart-card{
         display: none;
+    }
+
+    .prog-status{
+        width: 100%;
     }
 }
