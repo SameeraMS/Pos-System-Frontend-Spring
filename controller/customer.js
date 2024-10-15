@@ -230,7 +230,6 @@ $("#searchCustomer").on("input", function() {
         $.ajax({
             url: "http://localhost:8080/api/v1/customers/" + typedText,
             type: "GET",
-            data: {"search": typedText},
             success: (res) => {
                 console.log(res);
                 let searchArray = res;

@@ -35,12 +35,10 @@ function initialize() {
 
 function setOrderId() {
     $.ajax({
-        url: "http://localhost:8082/order",
+        url: "http://localhost:8080/api/v1/orders/nextId",
         type: "GET",
-        data: {"nextid": "nextid"},
         success: (res) => {
-            let code = res.substring(1, res.length - 1);
-            $('#order_Id').val(code);
+            $('#order_Id').val(res);
         },
         error: (res) => {
             console.error(res);
@@ -72,13 +70,14 @@ export function setItemIds(data) {
 customer_id.on('input', () => {
     if (customer_id.val() !== 'select the customer'){
 
+        console.log(customer_id.val());
+
         $.ajax({
-            url: "http://localhost:8082/customer",
+            url: "http://localhost:8080/api/v1/customers/search/" + customer_id.val(),
             type: "GET",
-            data: {"id": customer_id.val() },
             success: (res) => {
                 console.log(res);
-                let search = JSON.parse(res);
+                let search =res;
                 console.log(search);
 
                 customer_name.val(search.name);
@@ -98,17 +97,16 @@ item_Id.on('input', () => {
     if (item_Id.val() !== 'select the item'){
 
         $.ajax({
-            url: "http://localhost:8082/item",
+            url: "http://localhost:8080/api/v1/items/" + item_Id.val(),
             type: "GET",
-            data: {"id": item_Id.val() },
             success: (res) => {
                 console.log(res);
-                let search = JSON.parse(res);
+                let search = res;
                 console.log(search);
 
-                description.val(search.description);
-                qty_on_hand.val(search.qty);
-                unit_price.val(search.unitPrice);
+                description.val(search[0].description);
+                qty_on_hand.val(search[0].qty);
+                unit_price.val(search[0].unitPrice);
             },
             error: (res) => {
                 console.error(res);
@@ -266,7 +264,7 @@ order_btn.on('click', () => {
                 console.log(jsonOrder);
 
                 $.ajax({
-                    url: "http://localhost:8082/order",
+                    url: "http://localhost:8080/api/v1/orders",
                     type: "POST",
                     data: jsonOrder,
                     headers: { "Content-Type": "application/json" },
@@ -288,7 +286,7 @@ order_btn.on('click', () => {
 
                     setTimeout(() => {
                         $.ajax({
-                            url: "http://localhost:8082/orderDetails",
+                            url: "http://localhost:8080/api/v1/orderDetails",
                             type: "POST",
                             data: jsonOrderDetail,
                             headers: { "Content-Type": "application/json" },
