@@ -9,11 +9,10 @@ initialize()
 function initialize() {
 
     $.ajax({
-        url: "http://localhost:8082/customer",
+        url: "http://localhost:8080/api/v1/customers/nextId",
         type: "GET",
-        data: {"nextid": "nextid"},
         success: (res) => {
-            let code = res.substring(1, res.length - 1);
+            let code = res;
             $('#customerId').val(code);
         },
         error: (res) => {
