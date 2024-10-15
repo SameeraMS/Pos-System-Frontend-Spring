@@ -10,7 +10,6 @@ function initialize() {
         url: "http://localhost:8080/api/v1/items/nextId",
         type: "GET",
         success: (res) => {
-            console.log(res);
             $('#itemCode').val(res);
         },
         error: (res) => {
@@ -34,9 +33,7 @@ export function loadItemTable() {
         url: "http://localhost:8080/api/v1/items",
         type: "GET",
         success: (res) => {
-            console.log(res);
             itemArray = res;
-            console.log(itemArray);
 
             setItemIds(itemArray);
 
@@ -84,15 +81,12 @@ $('#item_submit').on('click', () => {
         let item = new ItemModel(id,desc,unit_price,qty);
         let jsonItem = JSON.stringify(item);
 
-        console.log(jsonItem);
-
         $.ajax({
             url: "http://localhost:8080/api/v1/items",
             type: "POST",
             data: jsonItem,
             headers: { "Content-Type": "application/json" },
             success: (res) => {
-                console.log(JSON.stringify(res));
                 Swal.fire({
                     icon: "success"
                 });
@@ -156,9 +150,7 @@ $(`#item_update`).on(`click`, () => {
             data: jsonItem,
             headers: { "Content-Type": "application/json" },
             success: (res) => {
-                console.log(JSON.stringify(res));
                 Swal.fire({
-                    title: JSON.stringify(res),
                     icon: "success"
                 });
             },
@@ -189,9 +181,7 @@ $('#item_delete').on('click',  () => {
         url: "http://localhost:8080/api/v1/items/" + id,
         type: "DELETE",
         success: (res) => {
-            console.log(JSON.stringify(res));
             Swal.fire({
-                title: JSON.stringify(res),
                 icon: "success"
             });
         },
@@ -225,9 +215,7 @@ $("#searchItem").on("input", function() {
             url: "http://localhost:8080/api/v1/items/" + typedText,
             type: "GET",
             success: (res) => {
-                console.log(res);
                 let searchArray = res;
-                console.log(searchArray);
 
                 $('#item_table').empty();
 

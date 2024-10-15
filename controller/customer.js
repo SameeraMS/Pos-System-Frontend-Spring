@@ -35,9 +35,7 @@ function loadTable() {
         url: "http://localhost:8080/api/v1/customers",
         type: "GET",
         success: (res) => {
-            console.log(res);
             customersArray =res;
-            console.log(customersArray);
 
             setCustomerIds(customersArray);
 
@@ -95,9 +93,7 @@ $('#customer_submit').on('click', () => {
                 data: jsonCustomer,
                 headers: { "Content-Type": "application/json" },
                 success: (res) => {
-                    console.log(JSON.stringify(res));
                     Swal.fire({
-                        title: JSON.stringify(res),
                         icon: "success"
                     });
                 },
@@ -164,9 +160,7 @@ $(`#customer_update`).on(`click`, () => {
             data: jsonCustomer,
             headers: { "Content-Type": "application/json" },
             success: (res) => {
-                console.log(JSON.stringify(res));
                 Swal.fire({
-                    title: JSON.stringify(res),
                     icon: "success"
                 });
             },
@@ -197,9 +191,7 @@ $('#customer_delete').on('click',  () => {
         url: "http://localhost:8080/api/v1/customers/" + id,
         type: "DELETE",
         success: (res) => {
-            console.log(JSON.stringify(res));
             Swal.fire({
-                title: JSON.stringify(res),
                 icon: "success"
             });
         },
@@ -231,9 +223,7 @@ $("#searchCustomer").on("input", function() {
             url: "http://localhost:8080/api/v1/customers/" + typedText,
             type: "GET",
             success: (res) => {
-                console.log(res);
                 let searchArray = res;
-                console.log(searchArray);
 
                 $('#customer_table').empty();
 

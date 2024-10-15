@@ -76,9 +76,7 @@ customer_id.on('input', () => {
             url: "http://localhost:8080/api/v1/customers/search/" + customer_id.val(),
             type: "GET",
             success: (res) => {
-                console.log(res);
                 let search =res;
-                console.log(search);
 
                 customer_name.val(search.name);
             },
@@ -100,9 +98,7 @@ item_Id.on('input', () => {
             url: "http://localhost:8080/api/v1/items/" + item_Id.val(),
             type: "GET",
             success: (res) => {
-                console.log(res);
                 let search = res;
-                console.log(search);
 
                 description.val(search[0].description);
                 qty_on_hand.val(search[0].qty);
@@ -261,8 +257,6 @@ order_btn.on('click', () => {
                 let order = new OrderModel(orderId, order_date, discountValue, subTotal, customerId);
                 let jsonOrder = JSON.stringify(order);
 
-                console.log(jsonOrder);
-
                 $.ajax({
                     url: "http://localhost:8080/api/v1/orders",
                     type: "POST",
@@ -271,7 +265,6 @@ order_btn.on('click', () => {
                     success: (res) => {
                         console.log(JSON.stringify(res));
                         Swal.fire({
-                            title: JSON.stringify(res),
                             icon: "success"
                         });
                     },

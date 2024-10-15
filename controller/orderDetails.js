@@ -7,13 +7,10 @@ export function loadOrderTable() {
     let ordersArray = [];
 
     $.ajax({
-        url: "http://localhost:8082/order",
+        url: "http://localhost:8080/api/v1/orders",
         type: "GET",
-        data: {"all": "getAll"},
         success: (res) => {
-            console.log(res);
-            ordersArray = JSON.parse(res);
-            console.log(ordersArray);
+            ordersArray = res;
 
             ordersArray.map((order, index) => {
 
@@ -41,13 +38,10 @@ $("#order_search").on("input", function() {
     var typedText = $("#order_search").val();
 
     $.ajax({
-        url: "http://localhost:8082/order",
+        url: "http://localhost:8080/api/v1/orders/"+typedText,
         type: "GET",
-        data: {"search": typedText},
         success: (res) => {
-            console.log(res);
-            let searchArray = JSON.parse(res);
-            console.log(searchArray);
+            let searchArray = res;
 
             $('#order_table').empty();
 
@@ -77,13 +71,10 @@ $('#order_table').on('click','tr', function () {
     let date = $(this).find('.order-date-val').text();
 
     $.ajax({
-        url: "http://localhost:8082/order",
+        url: "http://localhost:8080/api/v1/orders/"+o_id,
         type: "GET",
-        data: {"id": o_id },
         success: (res) => {
-            console.log(res);
-            let search = JSON.parse(res);
-            console.log(search);
+            let search = res[0];
 
             $('#order_details_discount').val(search.discount_value);
 
@@ -104,24 +95,18 @@ function loadDetailTable(o_id) {
     $('#order_detail_table').empty();
 
     $.ajax({
-        url: "http://localhost:8082/orderDetails",
+        url: "http://localhost:8080/api/v1/orderDetails/"+o_id,
         type: "GET",
-        data: {"id": o_id },
         success: (res) => {
-            console.log(res);
-            let search = JSON.parse(res);
-            console.log(search);
+            let search = res;
 
             search.map((orderDetail, index) => {
 
                     $.ajax({
-                        url: "http://localhost:8082/item",
+                        url: "http://localhost:8080/api/v1/items/"+orderDetail.item_id,
                         type: "GET",
-                        data: {"id": orderDetail.item_id },
                         success: (res) => {
-                            console.log(res);
-                            let search = JSON.parse(res);
-                            console.log(search);
+                            let search = res[0];
 
                             let desc = search.description
 
