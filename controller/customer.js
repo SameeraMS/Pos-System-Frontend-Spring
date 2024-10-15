@@ -12,8 +12,7 @@ function initialize() {
         url: "http://localhost:8080/api/v1/customers/nextId",
         type: "GET",
         success: (res) => {
-            let code = res;
-            $('#customerId').val(code);
+            $('#customerId').val(res);
         },
         error: (res) => {
             console.error(res);
@@ -33,12 +32,11 @@ function loadTable() {
     let customersArray = [];
 
     $.ajax({
-        url: "http://localhost:8082/customer",
+        url: "http://localhost:8080/api/v1/customers",
         type: "GET",
-        data: {"all": "getAll"},
         success: (res) => {
             console.log(res);
-            customersArray = JSON.parse(res);
+            customersArray =res;
             console.log(customersArray);
 
             setCustomerIds(customersArray);
@@ -92,7 +90,7 @@ $('#customer_submit').on('click', () => {
             let jsonCustomer = JSON.stringify(customer);
 
             $.ajax({
-                url: "http://localhost:8082/customer",
+                url: "http://localhost:8080/api/v1/customers",
                 type: "POST",
                 data: jsonCustomer,
                 headers: { "Content-Type": "application/json" },
@@ -161,7 +159,7 @@ $(`#customer_update`).on(`click`, () => {
         let jsonCustomer = JSON.stringify(cus);
 
         $.ajax({
-            url: "http://localhost:8082/customer",
+            url: "http://localhost:8080/api/v1/customers/" + id,
             type: "PUT",
             data: jsonCustomer,
             headers: { "Content-Type": "application/json" },
@@ -196,7 +194,7 @@ $('#customer_delete').on('click',  () => {
 
     var id = $('#customerId').val();
     $.ajax({
-        url: "http://localhost:8082/customer?id=" + id,
+        url: "http://localhost:8080/api/v1/customers/" + id,
         type: "DELETE",
         success: (res) => {
             console.log(JSON.stringify(res));
@@ -226,33 +224,37 @@ $('#customer_delete').on('click',  () => {
 $("#searchCustomer").on("input", function() {
     var typedText = $("#searchCustomer").val();
 
-    $.ajax({
-        url: "http://localhost:8082/customer",
-        type: "GET",
-        data: {"search": typedText},
-        success: (res) => {
-            console.log(res);
-            let searchArray = JSON.parse(res);
-            console.log(searchArray);
+    if(typedText == ""){
+        loadTable();
+    } else {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/customers/" + typedText,
+            type: "GET",
+            data: {"search": typedText},
+            success: (res) => {
+                console.log(res);
+                let searchArray = res;
+                console.log(searchArray);
 
-            $('#customer_table').empty();
+                $('#customer_table').empty();
 
-            searchArray.map((customer, index) => {
+                searchArray.map((customer, index) => {
 
-                var record = `<tr>
+                    var record = `<tr>
                     <td class="cus-id-val">${customer.id}</td>
                     <td class="cus-fname-val">${customer.name}</td>
                     <td class="cus-address-val">${customer.address}</td>
                     <td class="cus-contact-val">${customer.contact}</td>
                 </tr>`;
 
-                $('#customer_table').append(record);
-            });
-        },
-        error: (res) => {
-            console.error(res);
-        }
-    });
+                    $('#customer_table').append(record);
+                });
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
+    }
 });
 
 

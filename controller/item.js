@@ -7,12 +7,11 @@ initialize()
 function initialize() {
 
     $.ajax({
-        url: "http://localhost:8082/item",
+        url: "http://localhost:8080/api/v1/items/nextId",
         type: "GET",
-        data: {"nextid": "nextid"},
         success: (res) => {
-            let code = res.substring(1, res.length - 1);
-            $('#itemCode').val(code);
+            console.log(res);
+            $('#itemCode').val(res);
         },
         error: (res) => {
             console.error(res);
@@ -32,12 +31,11 @@ export function loadItemTable() {
     let itemArray = [];
 
     $.ajax({
-        url: "http://localhost:8082/item",
+        url: "http://localhost:8080/api/v1/items",
         type: "GET",
-        data: {"all": "getAll"},
         success: (res) => {
             console.log(res);
-            itemArray = JSON.parse(res);
+            itemArray = res;
             console.log(itemArray);
 
             setItemIds(itemArray);
@@ -89,14 +87,13 @@ $('#item_submit').on('click', () => {
         console.log(jsonItem);
 
         $.ajax({
-            url: "http://localhost:8082/item",
+            url: "http://localhost:8080/api/v1/items",
             type: "POST",
             data: jsonItem,
             headers: { "Content-Type": "application/json" },
             success: (res) => {
                 console.log(JSON.stringify(res));
                 Swal.fire({
-                    title: JSON.stringify(res),
                     icon: "success"
                 });
             },
@@ -152,8 +149,9 @@ $(`#item_update`).on(`click`, () => {
         let item = new ItemModel(id,description,unitPrice,qty);
         let jsonItem = JSON.stringify(item);
 
+
         $.ajax({
-            url: "http://localhost:8082/item",
+            url: "http://localhost:8080/api/v1/items/"+id,
             type: "PUT",
             data: jsonItem,
             headers: { "Content-Type": "application/json" },
@@ -188,7 +186,7 @@ $('#item_delete').on('click',  () => {
     var id = $('#itemCode').val();
 
     $.ajax({
-        url: "http://localhost:8082/item?id=" + id,
+        url: "http://localhost:8080/api/v1/items/" + id,
         type: "DELETE",
         success: (res) => {
             console.log(JSON.stringify(res));
@@ -219,33 +217,37 @@ $('#item_delete').on('click',  () => {
 $("#searchItem").on("input", function() {
     var typedText = $("#searchItem").val();
 
-    $.ajax({
-        url: "http://localhost:8082/item",
-        type: "GET",
-        data: {"search": typedText},
-        success: (res) => {
-            console.log(res);
-            let searchArray = JSON.parse(res);
-            console.log(searchArray);
 
-            $('#item_table').empty();
+    if(typedText == ""){
+        loadItemTable();
+    } else {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/items/" + typedText,
+            type: "GET",
+            success: (res) => {
+                console.log(res);
+                let searchArray = res;
+                console.log(searchArray);
 
-            searchArray.map((item, index) => {
+                $('#item_table').empty();
 
-                var record = `<tr>
+                searchArray.map((item, index) => {
+
+                    var record = `<tr>
                     <td class="itm-id-val">${item.id}</td>
                     <td class="itm-desc-val">${item.description}</td>
                     <td class="itm-unitPrice-val">${item.unitPrice}</td>
                     <td class="itm-qty-val">${item.qty}</td>
                 </tr>`;
 
-                $('#item_table').append(record);
-            });
-        },
-        error: (res) => {
-            console.error(res);
-        }
-    });
+                    $('#item_table').append(record);
+                });
+            },
+            error: (res) => {
+                console.error(res);
+            }
+        });
+    }
 });
 
 
